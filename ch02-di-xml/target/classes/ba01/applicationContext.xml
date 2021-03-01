@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="myStudent" class="com.bjpowernode.ba01.Student">
+        <property name="name" value="zs"/>
+        <property name="age" value="10"/>
+        <property name="school" ref="mySchool"/>
+    </bean>
+    <bean id="mySchool" class="com.bjpowernode.ba01.School">
+        <property name="name" value="bjpower"/>
+        <property name="address" value="bejinghaidianqu"/>
+    </bean>
+
+    <bean id="myStudent3" class="com.bjpowernode.ba03.Student">
+<!--        <constructor-arg name="name" value="lisi"/>-->
+<!--        <constructor-arg name="age" value="55"/>-->
+<!--        <constructor-arg name="school" ref="mySchool3"/>-->
+        <constructor-arg index="0" value="lisi"/>
+        <constructor-arg index="1" value="666"/>
+        <constructor-arg index="2" ref="mySchool3"/>
+    </bean>
+    <bean id="mySchool3" class="com.bjpowernode.ba03.School">
+        <property name="name" value="bjpower1"/>
+        <property name="address" value="123456"/>
+    </bean>
+</beans>
