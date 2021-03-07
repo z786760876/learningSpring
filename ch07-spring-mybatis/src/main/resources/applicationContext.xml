@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+        把数据库的配置信息，写在一个独立的文件，编译修改数据库的配置内容spring知道jdbc.properties文件的位置
+    -->
+    <context:property-placeholder location="jdbc.properties"/>
+
+    <!--声明数据源Datasource，作用是连接数据库的-->
+    <!--阿里巴巴 druid 地址:  https://github.com/alibaba/druid/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+
+        <!--
+            使用属性配置文件中的数据,语法${key}
+        -->
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc_url}"/>
+        <property name="username" value="${jdbc_user}"/>
+        <property name="password" value="${jdbc_password}"/>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="20"/>
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="6000"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="2000"/>
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="600000"/>
+        <property name="maxEvictableIdleTimeMillis" value="900000"/>
+
+        <property name="validationQuery" value="select 1"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+
+        <property name="keepAlive" value="true"/>
+        <property name="phyMaxUseCount" value="1000"/>
+
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="stat"/>
+    </bean>
+
+    <!--声明的是mybatis中提供的SqlSessionFactoryBean类，这个类内部创建SqlSessionFactoryBean的-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--set注入，把数据库连接池付给了datasource属性-->
+        <property name="dataSource" ref="dataSource"/>
+
+        <!--mybatis主配置文件的位置
+            configLocation属性是Resource类型，读取配置文件
+            它的赋值，使用value ,指定文件的路径，使用classpath:表示文件的位置
+        -->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+    </bean>
+
+    <!--创建dao对象，使用sqlsession的getMapper (StudentDao.class )
+        MapperScannerConfigurer:在内部调用getMapper()生成每个dao接口的代理对象
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--指定sqlsessionFactory对象的id-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--指定包名，包名是dao接口所在的包名。
+            MapperScannerConfigurer会扫描这个包中的所有接口，把每个接口都执行一次getMapper()方法，得到每个接口的dao对象。
+            创建好的dao对象放入到spring的容器中的。dao对象的默认名称是接口名首字母小写
+        -->
+        <property name="basePackage" value="com.bjpowernode.dao"/>
+    </bean>
+
+    <!--声明service-->
+    <bean id="studentService" class="com.bjpowernode.service.impl.StudentServiceImpl">
+        <property name="studentDao" ref="studentDao"/>
+    </bean>
+</beans>

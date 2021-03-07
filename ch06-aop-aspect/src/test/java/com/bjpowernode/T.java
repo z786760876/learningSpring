@@ -1,7 +1,7 @@
 package com.bjpowernode;
 
 
-import com.bjpowernode.ba02.SomeService;
+import com.bjpowernode.ba03.SomeService;
 
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -24,7 +24,8 @@ public class T {
 
         SomeService service = (SomeService) context.getBean("someServiceImpl");
 
-        String result = service.doOther("lisi", 24);
+        String result = service.doFirst("lisi", 24);
+
         System.out.println(result);
     }
 }
