@@ -10,10 +10,10 @@ public class MyTest {
     public void t1() {
         String config = "applicationcontext.xml";
         ApplicationContext ctx = new ClassPathXmlApplicationContext(config);
-        BuyGoodsService buyGoodsService = (BuyGoodsService) ctx.getBean("buyGoodsService");
+        BuyGoodsService buyGoodsService = (BuyGoodsService) ctx.getBean("buyService");
 
         System.out.println("service是代理: " + buyGoodsService.getClass().getName());
 
-        buyGoodsService.buy(1001, 1000);
+        buyGoodsService.buy(10010, 1000);
     }
 }

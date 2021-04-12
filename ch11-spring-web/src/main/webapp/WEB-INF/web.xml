@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>com.bjpowernode.controller.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/reg</url-pattern>
+    </servlet-mapping>
+
+    <!--注册监听器contextLoaderListener
+        监听器被创建对象后，会读取/wEB-INF/applicationcontext.xml
+        为什么要读取文件:因为在监听器中要创建Applicationcontext对象，需要加载配置文件。
+        /NEB-INF/applicationcontext.xml就是监听器默认读取的spring配置文件路徭
+    -->
+    <context-param>
+        <!--contextconfigLocation:表示配道文件的路怪-->
+        <param-name>org.springframework.web.context.ContextLoaderListener</param-name>
+        <!--自定义配置文件的路怪-->
+        <param-value>classpath:spring.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+</web-app>

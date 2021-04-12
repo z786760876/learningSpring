@@ -36,11 +36,11 @@ public class AppTest {
 
     @Test
     public void t2() {
-        String config = "applicationcontext.xml";
+        String config = "applicationContext.xml";
         ApplicationContext ctx = new ClassPathXmlApplicationContext(config);
         StudentDao studentDao = (StudentDao) ctx.getBean("studentDao");
         Student student = new Student();
-        student.setId(1021);
+        student.setId(1023);
         student.setName("SpringDao");
         student.setEmail("SpringDao@qq.com");
         student.setAge(2);
@@ -55,7 +55,7 @@ public class AppTest {
         ApplicationContext ctx = new ClassPathXmlApplicationContext(config);
         StudentService studentService = (StudentService) ctx.getBean("studentService");
         Student student = new Student();
-        student.setId(1022);
+        student.setId(1023);
         student.setName("studentService");
         student.setEmail("studentService@qq.com");
         student.setAge(3);
