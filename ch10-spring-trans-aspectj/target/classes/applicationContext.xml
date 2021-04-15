@@ -80,7 +80,7 @@
     </bean>
 
     <!--声明service-->
-    <bean id="buyGoodsService" class="com.bjpowernode.service.impl.BuyGoodsServiceImpl">
+    <bean id="buyService" class="com.bjpowernode.service.impl.BuyGoodsServiceImpl">
         <property name="goodsDao" ref="goodsDao"/>
         <property name="saleDao" ref="saleDao"/>
     </bean>
@@ -105,11 +105,18 @@
                 isolation :隔离级别
                 rollback-for :你指定的异常类名，全限定类名。发生异常一定回滚
             -->
-            <tx:method name="buy" propagation="NOT_SUPPORTED" isolation="DEFAULT"
-                       rollback-for="java.lang.NullPointerException,com.bjpowernode.excep.NotEenoughException"/>
-            <!--使用通配符，指定很多的方法-->
-            <tx:method name="add*" propagation="NOT_SUPPORTED" isolation="DEFAULT"/>
+            <tx:method name="buy" propagation="REQUIRED" isolation="DEFAULT"
+                       rollback-for="java.lang.NullPointerException,com.bjpowernode.excep.NotEnoughException"/>
 
+            <!--使用通配符，指定很多的方法-->
+            <!--使用通配符，指定很多的方法-->
+            <tx:method name="add*" propagation="REQUIRES_NEW"/>
+            <!--指定修改方法-->
+            <tx:method name="modify*"/>
+            <!--删除方法-->
+            <tx:method name="remove*"/>
+            <!--查询方法，query，search，find-->
+            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
         </tx:attributes>
     </tx:advice>
 
@@ -118,10 +125,18 @@
         <!--配置切入点表达式:指定哪些包中类，要使用事务
             id:切入点表达式的名称，唯一值
              expression:切入点表达式,指定哪些类要使用事务，aspectj会创建代理对象
-        -->
-        <aop:pointcut id="servicePt" expression="execution(* *..service.*.*(..))"/>
 
-        <!--配置增强器:关联adivce和pointcut-->
+            com.bjpowernode.service
+            com.crm.service
+            com.service
+        -->
+        <aop:pointcut id="servicePt" expression="execution(* *..service..*.*(..))"/>
+
+        <!--配置增强器：关联adivce和pointcut
+           advice-ref:通知，上面tx:advice哪里的配置
+           pointcut-ref：切入点表达式的id
+        -->
         <aop:advisor advice-ref="advice" pointcut-ref="servicePt"/>
     </aop:config>
+
 </beans>
